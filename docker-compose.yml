@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:9.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345  # Set the MySQL root password
+      MYSQL_DATABASE: decoreagora  # Optional: Create a database
+    ports:
+      - "3306:3306"  # Expose MySQL port (host:container)
+    volumes:
+      - mysql-data-decoreagora:/var/lib/mysql  # Persist MySQL data across restarts
+    networks:
+      - decoreagora-network
+    
+volumes:
+  mysql-data-decoreagora:
+
+networks:
+  decoreagora-network:
+    driver: bridge
