@@ -23,16 +23,21 @@ func main() {
 		DatabaseName: config.C.DB_DATABASE,
 	})
 
-	_, err := repositories.ConnectToDatabase(dsn)
+	db, err := repositories.ConnectToDatabase(dsn)
 	if err != nil {
 		log.Fatalf("FATAL ERROR WHENN CONNECTING TO DB %v", err)
 	}
-	//defer db.Close()
+	defer db.Close()
+
+	/*
+		REPOSITORIES
+	*/
+	mysql := repositories.NewMySQLRepository(db)
 
 	/*
 		USECASES
 	*/
-	userUC := usecases.NewUserUsecase()
+	userUC := usecases.NewUserUsecase(mysql)
 
 	/*
 		CONTROLLERS

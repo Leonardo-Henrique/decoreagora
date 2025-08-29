@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"errors"
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type (
 	User struct {
@@ -22,7 +27,21 @@ type (
 	}
 
 	AvailableCredits struct {
-		ID    string `json:"id"`
-		Total int    `json:"total"`
+		ID     string `json:"id"`
+		UserID int    `json:"user_id"`
+		Total  int    `json:"total"`
 	}
 )
+
+func (u *User) ValidateRequiredField() error {
+	if u.Name == "" || u.Email == "" {
+		return errors.New("user without required infos")
+	}
+	return nil
+}
+
+func (u *User) InitializeFreshUser() {
+	u.PublicID = uuid.New().String()
+	u.LastLogin = time.Now()
+	u.AvailableCredits = AvailableCredits{Total: 0}
+}
