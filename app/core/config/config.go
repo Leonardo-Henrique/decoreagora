@@ -16,6 +16,8 @@ type Config struct {
 	DB_PORT               string
 	DB_DATABASE           string
 	GOOGLE_GEMINI_API_KEY string
+	JWT_SECRET            []byte
+	STRIPE_SECRET_KEY     string
 }
 
 var C = &Config{}
@@ -34,6 +36,8 @@ func init() {
 	C.DB_DATABASE = getEnv("DB_DATABASE", "timelinelove")
 	C.DB_PORT = getEnv("DB_PORT", "")
 	C.GOOGLE_GEMINI_API_KEY = getEnv("GOOGLE_GEMINI_API_KEY", "")
+	C.JWT_SECRET = []byte(getEnv("JWT_SECRET", ""))
+	C.STRIPE_SECRET_KEY = getEnv("STRIPE_SECRET_KEY", "")
 
 }
 

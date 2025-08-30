@@ -29,6 +29,10 @@ func main() {
 	}
 	defer db.Close()
 
+	jwt := repositories.NewJWT()
+
+	//middleware := middlewares.NewMiddleware(jwt)
+
 	/*
 		REPOSITORIES
 	*/
@@ -38,16 +42,20 @@ func main() {
 		USECASES
 	*/
 	userUC := usecases.NewUserUsecase(mysql)
+	loginUC := usecases.NewLoginUsecase(mysql, jwt)
 
 	/*
 		CONTROLLERS
 	*/
 	userCtrl := controllers.NewUserController(*userUC)
+	loginCtrl := controllers.NewLoginController(*loginUC)
 
 	/*
 		ROUTES
 	*/
 	app.Post("/users", userCtrl.NewUser)
+	app.Post("/login", loginCtrl.Login)
+	app.Post("/authenticate", loginCtrl.AuthenticateCode)
 
 	log.Println("App Started")
 

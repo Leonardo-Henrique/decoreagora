@@ -35,7 +35,7 @@
     `code` VARCHAR(255) NOT NULL,
     `used` TINYINT NOT NULL,
     `users_id` INT NOT NULL,
-    `expire_at` VARCHAR(45) NULL COMMENT 'Timestamp',
+    `expire_at` DATETIME NULL COMMENT 'Timestamp',
     PRIMARY KEY (`id`),
     INDEX `fk_access_codes_users_idx` (`users_id` ASC) VISIBLE,
     CONSTRAINT `fk_access_codes_users`
