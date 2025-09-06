@@ -27,5 +27,10 @@ func (u *UserUsecase) CreateUser(user models.User) (models.User, error) {
 	if err := u.db.CreateUserCredit(userID); err != nil {
 		return models.User{}, err
 	}
+	user.ID = int(userID)
 	return user, nil
+}
+
+func (u *UserUsecase) GetMe(userID int) (models.UserInfoMe, error) {
+	return u.db.GetUserResume(userID)
 }

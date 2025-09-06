@@ -18,12 +18,23 @@ type (
 		Subscription     Subscription     `json:"subscription"`
 	}
 
+	UserInfoMe struct {
+		Name             string `json:"name"`
+		Email            string `json:"email"`
+		AvailableCredits int    `json:"available_credits"`
+		Tier             string `json:"plan_tier"`
+		IsPlanActive     bool   `json:"is_plan_active"`
+	}
+
 	Subscription struct {
 		ID                   int    `json:"id"`
+		Email                string `json:"email"`
+		Tier                 string `json:"tier"`
 		StripeCostumerID     string `json:"stripe_costumer_id"`
 		StripeSubscriptionID string `json:"stripe_subscription_id"`
 		StripePriceID        string `json:"stripe_price_id"`
-		IsActive             bool   `json:"is_active"`
+		IsActive             *bool  `json:"is_active"`
+		UserID               int    `json:"user_id"`
 	}
 
 	AvailableCredits struct {

@@ -12,6 +12,13 @@ services:
       - mysql-data-decoreagora:/var/lib/mysql  # Persist MySQL data across restarts
     networks:
       - decoreagora-network
+  ngrok:
+    image: ngrok/ngrok
+    restart: unless-stopped
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_TOKEN}
+    command: http host.docker.internal:3000
+    network_mode: bridge    
     
 volumes:
   mysql-data-decoreagora:

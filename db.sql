@@ -52,8 +52,11 @@
   CREATE TABLE IF NOT EXISTS `decoreagora`.`generated_images` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `public_id` VARCHAR(36) NOT NULL,
-    `url` VARCHAR(45) NOT NULL,
+    `original_image_key` VARCHAR(100) NOT NULL,
+    `generated_image_key` VARCHAR(100),
+    `prompt_description` VARCHAR(2000),
     `users_id` INT NOT NULL,
+    `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_generated_images_users1_idx` (`users_id` ASC) VISIBLE,
     CONSTRAINT `fk_generated_images_users1`
@@ -86,10 +89,12 @@
   -- -----------------------------------------------------
   CREATE TABLE IF NOT EXISTS `decoreagora`.`subscriptions` (
     `id` INT NOT NULL AUTO_INCREMENT,
-    `stripe_costumer_id` VARCHAR(255) NOT NULL,
-    `stripe_subscription_id` VARCHAR(255) NOT NULL,
-    `stripe_price_id` VARCHAR(255) NOT NULL,
-    `is_active` TINYINT NOT NULL,
+    `stripe_costumer_id` VARCHAR(255),
+    `stripe_subscription_id` VARCHAR(255),
+    `stripe_price_id` VARCHAR(255),
+    `is_active` TINYINT,
+    `tier` VARCHAR(100) NOT NULL,
+    `user_email`VARCHAR(100),
     `users_id` INT NOT NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_subscriptions_users1_idx` (`users_id` ASC) VISIBLE,
@@ -98,6 +103,20 @@
       REFERENCES `decoreagora`.`users` (`id`)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION)
+  ENGINE = InnoDB;
+
+  -- -----------------------------------------------------
+  -- Table `decoreagora`.`payment_history`
+  -- -----------------------------------------------------
+  CREATE TABLE IF NOT EXISTS `decoreagora`.`payment_history` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `public_id` VARCHAR(36) NOT NULL, 
+    `stripe_customer_id`VARCHAR(255) NOT NULL,
+    `processed_at` DATETIME NOT NULL,
+    `stripe_price_id` VARCHAR(255) NOT NULL,
+    `amount_paid` INT NOT NULL,
+    `credits_received` INT NOT NULL,
+    PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 
 

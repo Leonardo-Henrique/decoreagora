@@ -17,9 +17,10 @@ func NewStripeClient() *Stripe {
 	return &Stripe{}
 }
 
-func (s *Stripe) CreateCustomer(email string) (ports.Customer, error) {
+func (s *Stripe) CreateCustomer(email string, name string) (ports.Customer, error) {
 	params := &stripe.CustomerParams{
 		Email: stripe.String(email),
+		Name:  stripe.String(name),
 	}
 	customer, err := customer.New(params)
 	if err != nil {
@@ -28,6 +29,32 @@ func (s *Stripe) CreateCustomer(email string) (ports.Customer, error) {
 	return ports.Customer{
 		ID:    customer.ID,
 		Email: customer.Email,
+	}, nil
+}
+
+func (s *Stripe) CreatePaymentSession(customerID, priceID, successURL, cancelURL string) (ports.CheckoutSession, error) {
+	params := &stripe.CheckoutSessionParams{
+		Customer: stripe.String(customerID),
+		Mode:     stripe.String(string(stripe.CheckoutSessionModePayment)), // Changed from subscription to payment
+		LineItems: []*stripe.CheckoutSessionLineItemParams{
+			{
+				Price:    stripe.String(priceID),
+				Quantity: stripe.Int64(1),
+			},
+		},
+		SuccessURL: stripe.String(successURL),
+		CancelURL:  stripe.String(cancelURL),
+		Metadata: map[string]string{
+			"price_id": priceID,
+		},
+	}
+	session, err := session.New(params)
+	if err != nil {
+		return ports.CheckoutSession{}, err
+	}
+	return ports.CheckoutSession{
+		ID:  session.ID,
+		URL: session.URL,
 	}, nil
 }
 
