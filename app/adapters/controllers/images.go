@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"net/http"
@@ -119,17 +120,17 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 		})
 	}
 
-	editedFileBucketKey := "images/a5999"
+	//editedFileBucketKey := "images/a5999"
 
 	logger.Logging.Info("Sending image to AI edition")
-	/*editedFile, err := i.imageUC.EditWithAI(file, description)
+	editedFile, err := i.imageUC.EditWithAI(file, description)
 	if err != nil {
 		logger.Logging.Error("Error editing with AI:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(models.ImageUploadResponse{
 			Success: false,
 			Message: "Failed to edit image with AI",
 		})
-	} */
+	}
 
 	logger.Logging.Info("Starting decrementing credit")
 	if err := i.creditsUC.DecrementCredit(utils.GetCurrentUserID(c)); err != nil {
@@ -140,13 +141,13 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 		})
 	}
 
-	/*editedFileBucketKey, err := i.imageUC.SaveImage(ctx, bytes.NewReader(editedFile))
+	editedFileBucketKey, err := i.imageUC.SaveImage(ctx, bytes.NewReader(editedFile))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.ImageUploadResponse{
 			Success: false,
 			Message: "Failed to save IA image result",
 		})
-	} */
+	}
 
 	logger.Logging.Info("Registering the generated image key in database")
 	err = i.imageUC.FinishImageEdition(editedFileBucketKey, originalImagePublicKey)
