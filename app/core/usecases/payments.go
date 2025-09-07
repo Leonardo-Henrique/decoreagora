@@ -131,7 +131,12 @@ func (p *PaymentUsecase) handleCheckoutSessionCompleted(event stripe.Event) erro
 		return fmt.Errorf("error when updating user tier")
 	}
 
+	if session.PaymentIntent.ID == "" {
+		logger.Logging.Error("PaymentIntent ID is null, we cant track the exacty payment in Stripe", nil)
+	}
+
 	paymentEntry := models.PaymentHistory{
+		StripePaymentID: session.PaymentIntent.ID,
 		PublicID:        uuid.NewString(),
 		CustomerID:      customerID,
 		ProcessedAt:     time.Now(),

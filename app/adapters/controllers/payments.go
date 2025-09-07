@@ -49,8 +49,8 @@ func (p *PaymentController) CreateSession(c *fiber.Ctx) error {
 	paymentSessionRequest := models.CreatePaymentSessionRequest{
 		StripeCustomerID: sub.ID,
 		PriceID:          priceId,
-		SuccessUrl:       "https://www.google.com",
-		CancelUrl:        "https://www.youtube.com",
+		SuccessUrl:       config.C.FRONTEND_BASE_URL + "/dashboard",
+		CancelUrl:        config.C.FRONTEND_BASE_URL + "/checkout",
 	}
 
 	checkoutSession, err := p.payment.CreatePaymentSession(paymentSessionRequest)

@@ -19,6 +19,7 @@ type (
 	}
 
 	PaymentHistory struct {
+		StripePaymentID string    `json:"stripe_payment_id"`
 		ID              int       `json:"id"`
 		PublicID        string    `json:"public_id"`
 		CustomerID      string    `json:"customer_id"`
