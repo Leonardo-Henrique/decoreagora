@@ -25,6 +25,7 @@ type Config struct {
 	PKG_100_LAUNCH         string
 	PKG_200_LAUNCH         string
 	STRIPE_WEBHOOK_SECRET  string
+	FRONTEND_BASE_URL      string
 }
 
 var C = &Config{}
@@ -52,6 +53,7 @@ func init() {
 	C.PKG_100_LAUNCH = getEnv("PKG_100_LAUNCH", "")
 	C.PKG_200_LAUNCH = getEnv("PKG_200_LAUNCH", "")
 	C.STRIPE_WEBHOOK_SECRET = getEnv("STRIPE_WEBHOOK_SECRET", "")
+	C.FRONTEND_BASE_URL = getEnv("FRONTEND_BASE_URL", "")
 }
 
 func getEnv(key, defaultValue string) string {

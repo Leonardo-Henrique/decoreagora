@@ -452,8 +452,8 @@ func (r *MySQLRepository) UpdateUserTier(customerID, tier string) error {
 func (r *MySQLRepository) CreatePaymentHistoryEntry(paymentEntry models.PaymentHistory) error {
 	stmt, err := r.db.Prepare(`
 		INSERT INTO payment_history
-		(stripe_customer_id, processed_at, stripe_price_id, amount_paid, credits_received, public_id)
-		VALUES (?,?,?,?,?,?)
+		(stripe_customer_id, processed_at, stripe_price_id, amount_paid, credits_received, public_id, stripe_payment_id)
+		VALUES (?,?,?,?,?,?,?)
 	`)
 	if err != nil {
 		return err
@@ -467,6 +467,7 @@ func (r *MySQLRepository) CreatePaymentHistoryEntry(paymentEntry models.PaymentH
 		paymentEntry.AmountPaid,
 		paymentEntry.CreditsReceived,
 		paymentEntry.PublicID,
+		paymentEntry.StripePaymentID,
 	); err != nil {
 		return err
 	}
