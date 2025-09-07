@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -53,6 +54,8 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 	}
 
 	imageFile := files[0]
+	filename := imageFile.Filename
+	extension := filepath.Ext(filename)
 
 	if imageFile.Size > i.maxFileSize {
 		logger.Logging.Error("Image size is greater than maxSize", nil)
@@ -98,7 +101,7 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 	defer file.Close()
 
 	logger.Logging.Info("Saving original Image to S3")
-	originalImageKey, err := i.imageUC.SaveImage(ctx, file)
+	originalImageKey, err := i.imageUC.SaveImage(ctx, file, extension)
 	if err != nil {
 		logger.Logging.Error("Error when saving image in S3:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(models.ImageUploadResponse{
@@ -141,7 +144,7 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 		})
 	}
 
-	editedFileBucketKey, err := i.imageUC.SaveImage(ctx, bytes.NewReader(editedFile))
+	editedFileBucketKey, err := i.imageUC.SaveImage(ctx, bytes.NewReader(editedFile), extension)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(models.ImageUploadResponse{
 			Success: false,

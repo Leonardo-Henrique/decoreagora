@@ -30,9 +30,9 @@ func NewImagesUsecase(db ports.Database, s3 ports.ImagesHandler, ai ports.AiHand
 	}
 }
 
-func (i *ImagesUsecase) SaveImage(ctx context.Context, image io.Reader) (string, error) {
+func (i *ImagesUsecase) SaveImage(ctx context.Context, image io.Reader, extension string) (string, error) {
 
-	imageKey := fmt.Sprintf("images/%s",
+	imageKey := fmt.Sprintf("images/%s"+extension,
 		uuid.New().String()[:5],
 	)
 
