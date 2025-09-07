@@ -82,6 +82,15 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 		})
 	}
 
+	if len(strings.Fields(description)) < 3 {
+		return c.Status(fiber.StatusBadRequest).JSON(models.ImageUploadResponse{
+			Success: false,
+			Message: "Small decription, try adding more details",
+		})
+	}
+
+	prompt := fmt.Sprintf("Generate a high-quality image based on this description. Do not ask clarifying questions. Description: %s", description)
+
 	if !i.isValidImageType(imageFile.Header.Get("Content-Type")) {
 		logger.Logging.Error("User is trying to upload a not allowed image format", nil)
 		return c.Status(fiber.StatusBadRequest).JSON(models.ImageUploadResponse{
@@ -126,7 +135,7 @@ func (i *ImageController) CreateNewImage(c *fiber.Ctx) error {
 	//editedFileBucketKey := "images/a5999"
 
 	logger.Logging.Info("Sending image to AI edition")
-	editedFile, err := i.imageUC.EditWithAI(file, description)
+	editedFile, err := i.imageUC.EditWithAI(file, prompt)
 	if err != nil {
 		logger.Logging.Error("Error editing with AI:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(models.ImageUploadResponse{
