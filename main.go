@@ -22,7 +22,11 @@ func main() {
 
 	logger.InitLogger()
 
-	app := fiber.New()
+	app := fiber.New(
+		fiber.Config{
+			BodyLimit: 20 * 1024 * 1024,
+		},
+	)
 
 	dsn := repositories.MakeDSNString(models.DSN{
 		Host:         config.C.DB_HOST,
