@@ -27,7 +27,7 @@ func NewImageController(creditsUC usecases.CreditsUsecase, imageUC usecases.Imag
 	return &ImageController{
 		creditsUC:   creditsUC,
 		imageUC:     imageUC,
-		maxFileSize: 10 * 1024 * 1024,
+		maxFileSize: 20 * 1024 * 1024,
 	}
 }
 
