@@ -79,7 +79,7 @@ func main() {
 	*/
 	app.Use(cors.New(cors.Config{
 		AllowOriginsFunc: func(origin string) bool {
-			return origin == "https://app.decoreagora.com.br" || origin == "http://localhost:5174" || origin == "http://localhost:4173"
+			return origin == "https://app.decoreagora.com.br" || origin == "http://localhost:5174" || origin == "http://localhost:4173" || origin == "http://localhost:5173"
 		},
 		AllowCredentials: true,
 		AllowHeaders:     "Content-Type, Authorization, X-Requested-With, Accept, Origin, X-CSRF-Token",
